@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pedidos-recusados-legitimos"
+version = "1.0.0"
+description = "Projeto PySpark para análise de pedidos recusados e legítimos"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+authors = [
+    {name = "Seu Nome", email = "seu.email@exemplo.com"}
+]
+keywords = ["pyspark", "data-engineering", "etl"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+]
+
+dependencies = [
+    "pyspark>=3.5.0",
+    "pytest>=7.4.3",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest-spark>=0.6.0",
+]
+
+[tool.setuptools]
+package-dir = {"" = "."}
+packages = ["src", "src.config", "src.session", "src.io", "src.business", "src.orchestration"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+
+[project.scripts]
+run-data-pipeline = "main:main"

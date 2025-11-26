@@ -1,0 +1,153 @@
+# Projeto PySpark - Análise de Pedidos Recusados e Legítimos
+
+## Descrição
+Este projeto implementa uma solução PySpark para análise de pedidos de venda com pagamentos recusados e classificados como legítimos na avaliação de fraude.
+
+## Objetivo do Projeto
+Gerar um relatório de pedidos de venda que atendam aos seguintes critérios:
+- Pagamentos recusados (status=false)
+- Classificados como legítimos na avaliação de fraude (fraude=false)
+- Pedidos do ano de 2025
+- Ordenados por: estado (UF), forma de pagamento e data de criação
+
+## Estrutura do Projeto
+
+```
+projeto-pyspark/
+├── src/
+│   ├── config/              # Configurações da aplicação
+│   ├── session/             # Gerenciamento de sessão Spark
+│   ├── io/                  # Leitura e escrita de dados
+│   ├── business/            # Lógica de negócios
+│   └── orchestration/       # Orquestração do pipeline
+├── tests/                   # Testes unitários
+├── data/
+│   ├── input/              # Dados de entrada
+│   │   ├── pagamentos/
+│   │   └── pedidos/
+│   └── output/             # Dados de saída
+│       └── relatorio_pedidos/
+├── main.py                  # Ponto de entrada da aplicação
+├── requirements.txt         # Dependências Python
+├── pyproject.toml          # Configuração do projeto
+└── README.md               # Este arquivo
+```
+
+## Requisitos
+- Python 3.8+
+- PySpark 3.5.0+
+- Java 8 ou 11
+
+## Instalação
+
+### 1. Clone os repositórios de dados
+
+```bash
+# Dataset de pagamentos
+git clone https://github.com/infobarbosa/dataset-json-pagamentos.git
+
+# Dataset de pedidos
+git clone https://github.com/infobarbosa/datasets-csv-pedidos.git
+```
+
+### 2. Configure os caminhos dos dados
+
+Copie os dados para a estrutura do projeto:
+
+```bash
+mkdir -p data/input/pagamentos data/input/pedidos
+
+cp dataset-json-pagamentos/data/pagamentos/* data/input/pagamentos/
+cp datasets-csv-pedidos/data/pedidos/* data/input/pedidos/
+```
+
+### 3. Instale as dependências
+
+```bash
+pip install -r requirements.txt
+```
+
+## Execução
+
+### Executar o pipeline principal
+
+```bash
+python main.py
+```
+
+### Executar os testes unitários
+
+```bash
+pytest tests/ -v
+```
+
+## Arquitetura
+
+O projeto segue os princípios de:
+
+### 1. Orientação a Objetos
+- Todas as funcionalidades estão encapsuladas em classes
+- Separação clara de responsabilidades
+
+### 2. Injeção de Dependências
+- `main.py` atua como Aggregation Root
+- Todas as dependências são instanciadas e injetadas no fluxo principal
+
+### 3. Schemas Explícitos
+- Todos os DataFrames têm schemas explicitamente definidos
+- Não há inferência automática de schemas
+
+### 4. Configurações Centralizadas
+- Classe `AppConfig` centraliza todas as configurações
+- Fácil manutenção e modificação de parâmetros
+
+### 5. Logging
+- Registro detalhado de todas as etapas do pipeline
+- Facilita debugging e monitoramento
+
+### 6. Tratamento de Erros
+- Try/catch em pontos críticos
+- Logs de erros detalhados
+
+## Componentes Principais
+
+### AppConfig
+Centraliza todas as configurações da aplicação (caminhos, parâmetros de negócio, etc.)
+
+### SparkSessionManager
+Gerencia o ciclo de vida da sessão Spark
+
+### DataHandler
+Responsável pela leitura e escrita de dados com schemas explícitos
+
+### PedidosProcessor
+Implementa toda a lógica de negócios para processamento dos pedidos usando Spark SQL
+
+### PipelineOrchestrator
+Orquestra a execução de todo o pipeline
+
+## Saída
+
+O relatório final é salvo em formato Parquet no diretório `data/output/relatorio_pedidos/`
+
+### Estrutura do Relatório
+- **id_pedido**: Identificador único do pedido
+- **estado**: UF onde o pedido foi realizado
+- **forma_pagamento**: Forma de pagamento utilizada
+- **valor_total**: Valor total do pedido
+- **data_pedido**: Data de criação do pedido
+
+## Testes
+
+O projeto inclui testes unitários para os principais componentes:
+- Filtros de pagamentos
+- Agregação de pedidos
+- Filtros por ano
+
+Execute com: `pytest tests/ -v`
+
+## Autor
+Trabalho Final - Data Engineering Programming
+
+## Licença
+MIT
